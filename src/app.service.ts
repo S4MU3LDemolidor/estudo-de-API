@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from './prisma/prisma.service';
 
 @Injectable()
 export class AppService {
+  constructor(private prisma: PrismaService) {}
+
   getHello(): string {
     return 'Hello Mindo!';
   }
-  getAlunos(): Array<any> {
-    return [
-      { id: 1, nome: 'Lucas' },
-      { id: 2, nome: 'João' },
-      { id: 3, nome: 'Maria' },
-    ];
+
+  async getAlunos() {
+    return this.prisma.aluno.findMany({
+      include: { classeDeAula: true },
+    });
   }
 }
